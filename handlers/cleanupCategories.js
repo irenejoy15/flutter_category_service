@@ -1,4 +1,7 @@
 const {DynamoDBClient, ScanCommand, DeleteItemCommand} = require('@aws-sdk/client-dynamodb');
+const {SNSClient, PublishCommand} = require('@aws-sdk/client-sns');
+
+const snsClient = new SNSClient({region: 'us-east-1'});
 const dynamoDBClient = new DynamoDBClient({region: 'us-east-1'});
 
 //DEFINE CLEAN UP FUNCTION 
@@ -6,7 +9,7 @@ exports.cleanupCategories = async () => {
     try{
         // Get DynamoDN Table name from environment variable
         const tableName = process.env.DYNAMODB_TABLE;
-
+        const snsTopicArn = process.env.SNS_TOPIC_ARN;
         //Calculate timestamp for one 1 hour ago (Filter Outdated Categories)
         const oneHourAgo = new Date(Date.now()- 60*60*1000).toISOString();
 
@@ -46,6 +49,15 @@ exports.cleanupCategories = async () => {
             await dynamoDBClient.send(deleteItemCommand);
             deleteCount++;
         }
+
+        // SEND SMS NOTIFICATION TO ADMIN ABOUT THE CLEANUP ACTION AFTER DELETING THE OUTDATED CATEGORIES
+        const snsMessage = `Category Cleanup Completed: Successfully cleaned up ${deleteCount} outdated categories.`;
+        
+        await snsClient.send(new PublishCommand({
+            TopicArn: snsTopicArn,
+            Message: snsMessage,
+            Subject: 'Category Cleanup Notification',
+        }));
         // Return Success Response with the Count of Deleted Categories
         return {
             statusCode: 200,

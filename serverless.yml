@@ -9,6 +9,7 @@ provider:
   environment:
     BUCKET_NAME : category-images-irenejoy21-dev-12-new
     DYNAMODB_TABLE : Categories
+    SNS_TOPIC_ARN : arn:aws:sns:us-east-1:660880134927:Category-cleanup-topic
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
