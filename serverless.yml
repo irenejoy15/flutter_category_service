@@ -51,3 +51,11 @@ functions:
       - http:
           path: /upload-url
           method: post
+  updateCategoryImage:
+    handler: handlers/updateCategoryImage.updateCategoryImage
+    events:
+      - s3:
+          bucket: category-images-irenejoy21-dev-12-new
+          event: s3:ObjectCreated:Put
+          existing: true
+      
