@@ -10,8 +10,9 @@ exports.cleanupCategories = async () => {
         // Get DynamoDN Table name from environment variable
         const tableName = process.env.DYNAMODB_TABLE;
         const snsTopicArn = process.env.SNS_TOPIC_ARN;
-        //Calculate timestamp for one 1 hour ago (Filter Outdated Categories)
-        const oneHourAgo = new Date(Date.now()- 60*60*1000).toISOString();
+        //Calculate timestamp for one hour ago (Filter Outdated Categories)
+
+        const oneHourAgo = new Date(Date.now()- 60 *60*1000).toISOString();
 
         //Scan DynamoDB for categories created before one hour ago
         //Older One Hour Ago
@@ -20,7 +21,7 @@ exports.cleanupCategories = async () => {
             TableName: tableName,
             FilterExpression: 'createdAt < :oneHourAgo AND attribute_not_exists(imageUrl)',
             ExpressionAttributeValues: {
-                ':oneHourAgo': { S: oneHourAgo },
+                ":oneHourAgo": { S: oneHourAgo },
             },
         });
         
@@ -41,9 +42,7 @@ exports.cleanupCategories = async () => {
             //Create a delete command unique identifier for each category using fileName as the key
             const deleteItemCommand = new DeleteItemCommand({
                 TableName: tableName,
-                Key: {
-                    fileName: item.fileName.S, //Assuming fileName is the primary key in DynamoDB
-                }
+                Key: {fileName: {S: item.fileName}}
             });
             //Execute the delete command to remove the category from DynamoDB
             await dynamoDBClient.send(deleteItemCommand);

@@ -78,4 +78,5 @@ functions:
     events:
       - schedule:
           rate: rate(2 minutes)
+          
       
