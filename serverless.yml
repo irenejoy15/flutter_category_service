@@ -5,10 +5,32 @@ service: categoryService
 
 provider:
   name: aws
-  runtime: nodejs20.x
+  runtime: nodejs24.x
+  environment:
+    BUCKET_NAME : category-images-irenejoy21-dev-12-new
+    DYNAMODB_TABLE : Categories
+  
+  # region: us-east-1
   # Uncomment to easily set up a custom domain. Read the docs for more details:
   # https://www.serverless.com/framework/docs/providers/aws/guide/domains
   # domain: api.example.com
+resources:
+  Resources:
+    CategoryBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: category-images-irenejoy21-dev-12-new 
+    CategoryTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Categories
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: fileName
+            AttributeType: S #string
+        KeySchema:
+          - AttributeName: fileName
+            KeyType: HASH #partition key
 
 functions:
   hello:
