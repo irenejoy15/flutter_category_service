@@ -45,7 +45,10 @@ resources:
         KeySchema:
           - AttributeName: fileName
             KeyType: HASH #partition key
-
+    CategoryCleanupTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: Category-cleanup-topic
 functions:
   getUploadUrl:
     handler: handlers/getUploadUrl.getUploadUrl
