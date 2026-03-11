@@ -72,6 +72,12 @@ functions:
       - httpApi:
           path: /categories
           method: get
+  checkCategories:
+    handler: handlers/checkCategories.checkCategories
+    events:
+      - httpApi:
+          path: /check-categories
+          method: get
   updateCategoryImage:
     handler: handlers/updateCategoryImage.updateCategoryImage
     events:
@@ -84,6 +90,7 @@ functions:
     events:
       - schedule:
           rate: rate(2 minutes)
+  
   
           
       

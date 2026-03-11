@@ -2,10 +2,13 @@ const {DynamoDBClient, ScanCommand} = require('@aws-sdk/client-dynamodb');
 
 const dynamoDBClient = new DynamoDBClient({region: 'us-east-1'});
 
-exports.getAllCategories = async (event) => {
+exports.getAllCategories = async () => {
     try {
         const tableName = process.env.DYNAMODB_TABLE;
-        const scanCommand = new ScanCommand({ TableName: tableName });
+        const scanCommand = new ScanCommand({ 
+            TableName: tableName,
+            FilterExpression: 'attribute_exists(imageUrl)', // Filter to only include items with imageUrl 
+        });
         const {Items} = await dynamoDBClient.send(scanCommand);
         if(!Items || Items.length === 0){
             return {
@@ -26,7 +29,7 @@ exports.getAllCategories = async (event) => {
         console.error('Error fetching categories:', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({error: error.message}),
+            body: JSON.stringify({error: 'TEST IRENE '+error.message}),
         }
     }
 }
