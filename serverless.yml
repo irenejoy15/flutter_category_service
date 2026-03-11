@@ -49,6 +49,12 @@ resources:
       Type: AWS::SNS::Topic
       Properties:
         TopicName: Category-cleanup-topic
+    CategoryCleanupSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        TopicArn: arn:aws:sns:us-east-1:660880134927:Category-cleanup-topic
+        Protocol: email
+        Endpoint: cefriantrinchera21@gmail.com
 functions:
   getUploadUrl:
     handler: handlers/getUploadUrl.getUploadUrl
