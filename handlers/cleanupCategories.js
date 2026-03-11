@@ -19,7 +19,10 @@ exports.cleanupCategories = async () => {
         //Do not have imageUrlField
         const scanCommand = new ScanCommand({
             TableName: tableName,
-            FilterExpression: 'createdAt < :oneHourAgo AND attribute_not_exists(imageUrl)',
+            FilterExpression: '#createdAt > :oneHourAgo AND attribute_not_exists(imageUrl)',
+            ExpressionAttributeNames: {
+                '#createdAt': 'createdAt',
+            },
             ExpressionAttributeValues: {
                 ":oneHourAgo": { S: oneHourAgo },
             },

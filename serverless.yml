@@ -63,9 +63,15 @@ functions:
   getUploadUrl:
     handler: handlers/getUploadUrl.getUploadUrl
     events:
-      - http:
+      - httpApi:
           path: /upload-url
           method: post
+  getAllCategories:
+    handler: handlers/getAllCategories.getAllCategories
+    events:
+      - httpApi:
+          path: /categories
+          method: get
   updateCategoryImage:
     handler: handlers/updateCategoryImage.updateCategoryImage
     events:
@@ -78,5 +84,6 @@ functions:
     events:
       - schedule:
           rate: rate(2 minutes)
+  
           
       
