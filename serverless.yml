@@ -24,7 +24,10 @@ provider:
         - dynamodb:UpdateItem
       Resource: 
         - arn:aws:dynamodb:us-east-1:660880134927:table/Categories
-  
+    - Effect: 'Allow'
+      Action:
+        - sns:Publish
+      Resource: arn:aws:sns:us-east-1:660880134927:Category-cleanup-topic
   # region: us-east-1
   # Uncomment to easily set up a custom domain. Read the docs for more details:
   # https://www.serverless.com/framework/docs/providers/aws/guide/domains
