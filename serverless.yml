@@ -9,6 +9,18 @@ provider:
   environment:
     BUCKET_NAME : category-images-irenejoy21-dev-12-new
     DYNAMODB_TABLE : Categories
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 's3:PutObject'
+      Resource: 
+        - arn:aws:s3:::category-images-irenejoy21-dev-12-new/*
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:Scan
+      Resource: 
+        - arn:aws:dynamodb:us-east-1:660880134927:table/Categories
   
   # region: us-east-1
   # Uncomment to easily set up a custom domain. Read the docs for more details:
@@ -33,9 +45,9 @@ resources:
             KeyType: HASH #partition key
 
 functions:
-  hello:
-    handler: handler.hello
+  getUploadUrl:
+    handler: handlers/getUploadUrl.getUploadUrl
     events:
-      - httpApi:
-          path: /
-          method: get
+      - http:
+          path: /upload-url
+          method: post
