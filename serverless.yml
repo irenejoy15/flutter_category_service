@@ -19,6 +19,8 @@ provider:
       Action:
         - dynamodb:PutItem
         - dynamodb:Scan
+        - dynamodb:DeleteItem
+        - dynamodb:UpdateItem
       Resource: 
         - arn:aws:dynamodb:us-east-1:660880134927:table/Categories
   
@@ -58,4 +60,9 @@ functions:
           bucket: category-images-irenejoy21-dev-12-new
           event: s3:ObjectCreated:Put
           existing: true
+  cleanUpCategories:
+    handler: handlers/cleanUpCategories.cleanUpCategories
+    events:
+      - schedule:
+          rate: rate(2 minutes)
       

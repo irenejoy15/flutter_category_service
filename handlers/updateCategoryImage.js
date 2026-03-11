@@ -14,7 +14,7 @@ exports.updateCategoryImage = async (event) => {
         // Construct a public URL on how the uploaded image can be accessed
         const imageUrl = `https://${bucketName}.s3.amazonaws.com/${fileName}`;
         // Prepare the parameters for updating the DynamoDB record
-        new UpdateItemCommand({
+        const updateItemCommand = new UpdateItemCommand({
             TableName : tableName,
             Key:{
                 fileName: { S: fileName },
@@ -24,7 +24,7 @@ exports.updateCategoryImage = async (event) => {
                 ':imageUrl': { S: imageUrl },
             },
         });
-        await dynamoDBClient.send(UpdateItemCommand);
+        await dynamoDBClient.send(updateItemCommand);
         return {
             statusCode: 200,
             body: JSON.stringify({msg: 'Category image updated successfully'}),
